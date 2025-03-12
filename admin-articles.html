@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration des Articles - APBE</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .admin-header {
+      background-color: #343a40;
+      color: white;
+      padding: 1rem 0;
+    }
+
+    .article-card {
+      margin-bottom: 1rem;
+      border-left: 4px solid #ffc107;
+    }
+
+    .form-label {
+      font-weight: 500;
+    }
+
+    .drop-zone {
+      border: 2px dashed #ccc;
+      border-radius: 4px;
+      padding: 20px;
+      text-align: center;
+      background: #f8f9fa;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .drop-zone:hover,
+    .drop-zone.dragover {
+      border-color: #ffc107;
+      background: #fff8e5;
+    }
+
+    .pdf-preview {
+      max-width: 100px;
+      margin: 10px auto;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="admin-header">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1 class="h3 mb-0">Administration des Articles</h1>
+        <a href="articles.html" class="btn btn-outline-light">
+          <i class="fas fa-arrow-left me-2"></i>Retour aux articles
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container my-4">
+    <!-- Formulaire d'ajout d'article -->
+    <div class="card mb-4">
+      <div class="card-header bg-warning text-dark">
+        <h2 class="h5 mb-0">Ajouter un nouvel article</h2>
+      </div>
+      <div class="card-body">
+        <form id="articleForm" onsubmit="return handleSubmit(event)">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="drop-zone" id="dropZone">
+                <div class="pdf-preview">
+                  <i class="far fa-file-pdf fa-4x text-danger"></i>
+                </div>
+                <p class="mb-2">Glissez votre fichier PDF ici ou cliquez pour sélectionner</p>
+                <small class="text-muted">Taille maximale : 10 MB</small>
+                <input type="file" id="fileInput" accept=".pdf" class="d-none" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Titre de l'article</label>
+              <input type="text" class="form-control" name="titre" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Catégorie</label>
+              <select class="form-select" name="category" required>
+                <option value="">Sélectionner une catégorie</option>
+                <option value="Carrière">Carrière</option>
+                <option value="Formation">Formation</option>
+                <option value="Entrepreneuriat">Entrepreneuriat</option>
+                <option value="Leadership">Leadership</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" name="description" rows="3" required></textarea>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Nom de l'auteur</label>
+              <input type="text" class="form-control" name="authorName" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Tags (séparés par des virgules)</label>
+              <input type="text" class="form-control" name="tags" placeholder="ex: emploi, formation, carrière">
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-warning">
+                <i class="fas fa-plus-circle me-2"></i>Publier l'article
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Liste des articles -->
+    <div class="card">
+      <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h2 class="h5 mb-0">Articles publiés</h2>
+        <span class="badge bg-warning" id="articleCount">0 articles</span>
+      </div>
+      <div class="card-body" id="articlesList">
+        <!-- Les articles seront ajoutés ici dynamiquement -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Configuration de la zone de dépôt
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      if (files.length > 0 && files[0].type === 'application/pdf') {
+        fileInput.files = files;
+        updateFilePreview(files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        updateFilePreview(e.target.files[0]);
+      }
+    });
+
+    function updateFilePreview(file) {
+      const preview = dropZone.querySelector('p');
+      preview.textContent = `Fichier sélectionné : ${file.name}`;
+    }
+
+    // Fonction pour charger les articles
+    function loadArticles() {
+      const articles = JSON.parse(localStorage.getItem('articles') || '[]');
+      displayArticles(articles);
+      updateArticleCount(articles.length);
+    }
+
+    // Fonction pour sauvegarder les articles
+    function saveArticles(articles) {
+      localStorage.setItem('articles', JSON.stringify(articles));
+    }
+
+    // Fonction pour afficher les articles
+    function displayArticles(articles) {
+      const container = document.getElementById('articlesList');
+      container.innerHTML = '';
+
+      if (articles.length === 0) {
+        container.innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-newspaper fa-3x mb-3"></i>
+                        <p>Aucun article publié</p>
+                    </div>
+                `;
+        return;
+      }
+
+      articles.forEach((article, index) => {
+        const card = document.createElement('div');
+        card.className = 'card article-card';
+        card.innerHTML = `
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h3 class="h5 mb-1">${article.title}</h3>
+                                <p class="mb-2 text-muted">
+                                    <i class="fas fa-user me-2"></i>${article.author.name}
+                                    <span class="ms-2"><i class="fas fa-tag me-1"></i>${article.category}</span>
+                                </p>
+                                <div class="mb-2">
+                                    ${article.tags.map(tag => `<span class="badge bg-light text-dark me-1">${tag}</span>`).join('')}
+                                </div>
+                            </div>
+                            <button class="btn btn-danger btn-sm" onclick="deleteArticle(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+        container.appendChild(card);
+      });
+    }
+
+    // Fonction pour mettre à jour le compteur d'articles
+    function updateArticleCount(count) {
+      document.getElementById('articleCount').textContent = `${count} article${count > 1 ? 's' : ''}`;
+    }
+
+    // Fonction pour gérer la soumission du formulaire
+    function handleSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      const formData = new FormData(form);
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('Veuillez sélectionner un fichier PDF');
+        return false;
+      }
+
+      // Lecture du fichier PDF
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const newArticle = {
+          id: Date.now(),
+          title: formData.get('titre'),
+          category: formData.get('category'),
+          description: formData.get('description'),
+          author: {
+            name: formData.get('authorName'),
+            avatar: 'data:image/svg+xml;base64,' + btoa('<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><circle cx="25" cy="25" r="25" fill="#ffc107"/><text x="25" y="35" font-size="25" text-anchor="middle" fill="#fff">' + formData.get('authorName').charAt(0).toUpperCase() + '</text></svg>')
+          },
+          tags: formData.get('tags').split(',').map(tag => tag.trim()).filter(tag => tag),
+          pdfUrl: e.target.result,
+          date: new Date().toLocaleDateString('fr-FR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }),
+          downloads: 0,
+          comments: []
+        };
+
+        const articles = JSON.parse(localStorage.getItem('articles') || '[]');
+        articles.unshift(newArticle);
+        saveArticles(articles);
+        loadArticles();
+        form.reset();
+        dropZone.querySelector('p').textContent = 'Glissez votre fichier PDF ici ou cliquez pour sélectionner';
+
+        alert('Article publié avec succès !');
+      };
+      reader.readAsDataURL(file);
+
+      return false;
+    }
+
+    // Fonction pour supprimer un article
+    function deleteArticle(index) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer cet article ?')) {
+        const articles = JSON.parse(localStorage.getItem('articles') || '[]');
+        articles.splice(index, 1);
+        saveArticles(articles);
+        loadArticles();
+      }
+    }
+
+    // Charger les articles au chargement de la page
+    document.addEventListener('DOMContentLoaded', loadArticles);
+  </script>
+</body>
+
+</html>

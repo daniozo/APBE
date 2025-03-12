@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval';">
+  <meta http-equiv="Strict-Transport-Security" content="max-age=31536000; includeSubDomains">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="description" content="Articles et publications professionnels de l'APBE">
+  <!-- Protection contre le clickjacking -->
+  <style>
+    html {
+      display: none;
+    }
+  </style>
+  <script>
+    if (self == top) {
+      document.documentElement.style.display = 'block';
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <title>Articles - APBE</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <style>
+    .article-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .article-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .author-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .comment-section {
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .comment {
+      border-left: 3px solid var(--bs-warning);
+      padding: 15px;
+      margin-bottom: 15px;
+      background-color: #f8f9fa;
+    }
+
+    .article-meta {
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    .tag {
+      background-color: rgba(var(--bs-warning-rgb), 0.1);
+      color: var(--bs-warning);
+      padding: 0.25rem 0.5rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      text-decoration: none;
+    }
+
+    .tag:hover {
+      background-color: var(--bs-warning);
+      color: white;
+    }
+
+    .pdf-icon {
+      font-size: 2.5rem;
+      color: #dc3545;
+    }
+
+    .download-count {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: rgba(var(--bs-warning-rgb), 0.9);
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+    }
+
+    .divider-custom {
+      margin: 1.25rem 0 1.5rem;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .divider-custom .divider-custom-line {
+      width: 100%;
+      max-width: 7rem;
+      height: 0.25rem;
+      border-radius: 1rem;
+      margin: 0 1rem;
+    }
+
+    .divider-custom .divider-custom-icon {
+      font-size: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <span class="text-warning">APBE</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#about">À propos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#services">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"
+              href="https://docs.google.com/forms/d/e/1FAIpQLScTBdjKoqA34xkeJnhREmrpSuiLNVftHyDMnYS17zj5GHPrWA/viewform"
+              target="_blank">Inscription</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="offres.html">Offres d'emploi</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="articles.html">
+              <i class="fas fa-newspaper me-1"></i>Articles
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header Section -->
+  <section class="page-header" style="margin-top: 76px; padding: 60px 0; background-color: #f8f9fa;">
+    <div class="container">
+      <div class="text-center mb-4" data-aos="fade-up">
+        <h1 class="display-3 fw-bold text-warning">Articles</h1>
+      </div>
+      <div class="row align-items-center" data-aos="fade-up">
+        <div class="col-12">
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchInput" placeholder="Rechercher un article...">
+            <button class="btn btn-warning" type="button" onclick="filterArticles()">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Articles Section -->
+  <section class="py-5" id="latest">
+    <div class="container">
+      <!-- Liste des articles -->
+      <div class="row g-4" id="articlesContainer">
+        <!-- Les articles seront ajoutés ici dynamiquement -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Template pour un article -->
+  <template id="articleTemplate">
+    <div class="col-md-6 col-lg-4">
+      <div class="card article-card h-100">
+        <div class="card-body position-relative">
+          <span class="download-count">
+            <i class="fas fa-download me-1"></i><span class="download-number">0</span>
+          </span>
+          <div class="text-center mb-3">
+            <i class="far fa-file-pdf pdf-icon"></i>
+          </div>
+          <h5 class="card-title article-title text-center mb-3"></h5>
+          <div class="d-flex align-items-center mb-3">
+            <img src="" alt="" class="author-avatar me-2">
+            <div>
+              <h6 class="mb-0 author-name"></h6>
+              <small class="text-muted publish-date"></small>
+            </div>
+          </div>
+          <p class="card-text article-description"></p>
+          <div class="d-flex gap-2 mb-3 article-tags"></div>
+          <div class="d-grid gap-2">
+            <a href="#" class="btn btn-warning download-btn">
+              <i class="fas fa-download me-2"></i>Télécharger le PDF
+            </a>
+            <button class="btn btn-outline-warning comment-btn" data-bs-toggle="collapse" data-bs-target="">
+              <i class="far fa-comment me-2"></i>Commentaires (<span class="comment-count">0</span>)
+            </button>
+          </div>
+        </div>
+        <!-- Section des commentaires (collapsible) -->
+        <div class="collapse" id="">
+          <div class="card-footer bg-light">
+            <div class="comments-list mb-3"></div>
+            <form class="comment-form">
+              <div class="mb-3">
+                <input type="text" class="form-control form-control-sm" placeholder="Votre nom" required>
+              </div>
+              <div class="mb-3">
+                <textarea class="form-control form-control-sm" rows="2" placeholder="Votre commentaire"
+                  required></textarea>
+              </div>
+              <button type="submit" class="btn btn-warning btn-sm">Commenter</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Contact</h5>
+          <p><i class="fas fa-phone me-2"></i> +212 619 38 69 59</p>
+          <p><i class="fas fa-envelope me-2"></i> asso.inspiredculturecommunity@gmail.com</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <img src="assets/medias/images/forum-apbe-3.jpg" alt="ICC Logo" height="50">
+          <p class="mt-2">&copy; 2024 APBE - Accompagnement Professionnel Business-Emploi</p>
+          <small class="text-muted">
+            Tous droits réservés. Le contenu de ce site (textes, images, vidéos, logo) est la propriété exclusive de
+            l'association ICC (Inspired Culture Community) et de la plateforme APBE. Toute reproduction ou utilisation
+            sans autorisation écrite est strictement interdite.
+          </small>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 text-center">
+          <small class="text-muted">
+            Siège social : Maroc | Association ICC - APBE | RC : En cours d'enregistrement
+          </small>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Initialisation AOS
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+
+    // Fonction pour afficher les articles
+    function displayArticles(filteredArticles = null) {
+      // Recharger les articles depuis le localStorage
+      const articles = JSON.parse(localStorage.getItem('articles') || '[]');
+
+      // Si aucun articles filtrés n'est fourni, utiliser tous les articles
+      if (!filteredArticles) {
+        filteredArticles = articles;
+      }
+
+      const container = document.getElementById('articlesContainer');
+      const template = document.getElementById('articleTemplate');
+
+      // Vider le conteneur
+      container.innerHTML = '';
+
+      if (filteredArticles.length === 0) {
+        container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Aucun article disponible</p>
+                    </div>
+                `;
+        return;
+      }
+
+      filteredArticles.forEach(article => {
+        const articleElement = template.content.cloneNode(true);
+
+        // Mise à jour des informations de l'article
+        articleElement.querySelector('.article-title').textContent = article.title;
+        articleElement.querySelector('.article-description').textContent = article.description;
+        articleElement.querySelector('.author-avatar').src = article.author.avatar;
+        articleElement.querySelector('.author-avatar').alt = article.author.name;
+        articleElement.querySelector('.author-name').textContent = article.author.name;
+        articleElement.querySelector('.publish-date').textContent = article.date;
+        articleElement.querySelector('.download-number').textContent = article.downloads;
+        articleElement.querySelector('.comment-count').textContent = article.comments.length;
+
+        // Configuration des tags
+        const tagsContainer = articleElement.querySelector('.article-tags');
+        article.tags.forEach(tag => {
+          const tagLink = document.createElement('a');
+          tagLink.href = '#';
+          tagLink.className = 'tag';
+          tagLink.textContent = tag;
+          tagsContainer.appendChild(tagLink);
+        });
+
+        // Configuration du bouton de téléchargement
+        const downloadBtn = articleElement.querySelector('.download-btn');
+        downloadBtn.href = article.pdfUrl;
+        downloadBtn.setAttribute('download', `${article.title}.pdf`);
+        downloadBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          // Créer un lien temporaire pour le téléchargement
+          const link = document.createElement('a');
+          link.href = article.pdfUrl;
+          link.download = `${article.title}.pdf`;
+
+          // Incrémenter le compteur de téléchargements
+          const articles = JSON.parse(localStorage.getItem('articles') || '[]');
+          const articleIndex = articles.findIndex(a => a.id === article.id);
+          if (articleIndex !== -1) {
+            articles[articleIndex].downloads = (articles[articleIndex].downloads || 0) + 1;
+            localStorage.setItem('articles', JSON.stringify(articles));
+            // Mettre à jour l'affichage du compteur
+            const downloadCount = e.target.closest('.card-body').querySelector('.download-number');
+            downloadCount.textContent = articles[articleIndex].downloads;
+          }
+
+          // Déclencher le téléchargement
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        });
+
+        // Configuration de la section des commentaires
+        const commentsSection = articleElement.querySelector('.collapse');
+        commentsSection.id = `comments-${article.id}`;
+        articleElement.querySelector('.comment-btn').setAttribute('data-bs-target', `#comments-${article.id}`);
+
+        const commentsList = articleElement.querySelector('.comments-list');
+        article.comments.forEach(comment => {
+          const commentElement = document.createElement('div');
+          commentElement.className = 'comment mb-2';
+          commentElement.innerHTML = `
+                        <div class="d-flex justify-content-between">
+                            <h6 class="mb-1">${comment.name}</h6>
+                            <small class="text-muted">${comment.date}</small>
+                        </div>
+                        <p class="mb-0">${comment.text}</p>
+                    `;
+          commentsList.appendChild(commentElement);
+        });
+
+        container.appendChild(articleElement);
+      });
+    }
+
+    // Fonction de filtrage
+    function filterArticles() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+
+      const filteredArticles = articles.filter(article => {
+        return !search ||
+          article.title.toLowerCase().includes(search) ||
+          article.description.toLowerCase().includes(search) ||
+          article.author.name.toLowerCase().includes(search);
+      });
+
+      displayArticles(filteredArticles);
+    }
+
+    // Écouteur d'événement pour la recherche
+    document.getElementById('searchInput').addEventListener('input', filterArticles);
+
+    // Afficher les articles au chargement de la page
+    document.addEventListener('DOMContentLoaded', function () {
+      displayArticles();
+      // Réafficher les articles si le localStorage est modifié
+      window.addEventListener('storage', function (e) {
+        if (e.key === 'articles') {
+          const articles = JSON.parse(localStorage.getItem('articles') || '[]');
+          displayArticles(articles);
+        }
+      });
+    });
+
+    // Gestionnaire pour les commentaires
+    document.addEventListener('submit', function (e) {
+      if (e.target.classList.contains('comment-form')) {
+        e.preventDefault();
+
+        const form = e.target;
+        const name = form.querySelector('input[type="text"]').value;
+        const text = form.querySelector('textarea').value;
+
+        const commentElement = document.createElement('div');
+        commentElement.className = 'comment mb-2';
+        commentElement.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <h6 class="mb-1">${name}</h6>
+                        <small class="text-muted">À l'instant</small>
+                    </div>
+                    <p class="mb-0">${text}</p>
+                `;
+      }
+    });
+
+    // Afficher les articles initialement
+    displayArticles();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval';">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Opportunités Professionnelles - APBE</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- AOS CSS -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <!-- Optimisation du chargement -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+
+  <!-- Compression des images -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if ('loading' in HTMLImageElement.prototype) {
+        const images = document.querySelectorAll('img[loading="lazy"]');
+        images.forEach(img => {
+          img.src = img.src;
+        });
+      }
+    });
+  </script>
+  <style>
+    .no-offers {
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      margin: 20px 0;
+    }
+
+    .no-offers-icon {
+      font-size: 4rem;
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .filters-section {
+      background-color: #f8f9fa;
+      padding: 20px 0;
+      margin-bottom: 30px;
+    }
+
+    .job-card {
+      height: 100%;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .job-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">
+        <span class="text-warning">APBE</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Accueil</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#about">À propos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html#services">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link"
+              href="https://docs.google.com/forms/d/e/1FAIpQLScTBdjKoqA34xkeJnhREmrpSuiLNVftHyDMnYS17zj5GHPrWA/viewform"
+              target="_blank">Inscription</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="offres.html">Offres d'emploi</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="articles.html">
+              <i class="fas fa-newspaper me-1"></i>Articles
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header Section -->
+  <section class="page-header" style="margin-top: 76px; padding: 60px 0; background-color: #f8f9fa;">
+    <div class="container">
+      <div class="row align-items-center" data-aos="fade-up">
+        <div class="col-md-8">
+          <h1 class="display-4 fw-bold text-warning mb-3">Opportunités Professionnelles</h1>
+          <p class="lead mb-4">Trouvez l'opportunité qui correspond à vos ambitions au Maroc</p>
+        </div>
+        <div class="col-md-4 text-center text-md-end mt-4 mt-md-0">
+          <img src="assets/medias/images/forum-apbe-1.jpg" alt="APBE" class="img-fluid rounded shadow-lg"
+            style="max-height: 300px; object-fit: cover;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filtres Section -->
+  <section class="filters-section">
+    <div class="container">
+      <div class="row g-3" data-aos="fade-up">
+        <div class="col-md-3">
+          <select class="form-select" id="typeContrat">
+            <option value="">Type de contrat</option>
+            <option value="CDI">CDI</option>
+            <option value="CDD">CDD</option>
+            <option value="Stage">Stage</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="ville">
+            <option value="">Ville</option>
+            <option value="Casablanca">Casablanca</option>
+            <option value="Rabat">Rabat</option>
+            <option value="Tanger">Tanger</option>
+            <option value="Marrakech">Marrakech</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <input type="text" class="form-control" placeholder="Rechercher un poste..." id="searchInput">
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-warning w-100" onclick="filterOffers()">
+            <i class="fas fa-search me-2"></i>Rechercher
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Offres Section -->
+  <section class="py-5">
+    <div class="container">
+      <!-- Section des offres -->
+      <div id="offersContainer" class="row g-4">
+        <!-- Message "Aucune offre" par défaut -->
+        <div class="col-12 no-offers" id="noOffersMessage">
+          <div>
+            <i class="fas fa-briefcase no-offers-icon"></i>
+            <h2 class="mb-3">Aucune offre disponible</h2>
+            <p class="lead">Revenez plus tard pour découvrir nos nouvelles opportunités.</p>
+          </div>
+        </div>
+
+        <!-- Template pour une offre (caché par défaut) -->
+        <template id="jobTemplate">
+          <div class="col-md-6 mb-4 offer-item" data-aos="fade-up">
+            <div class="card job-card">
+              <div class="card-body">
+                <h3 class="card-title text-warning">TITRE_POSTE</h3>
+                <p class="company mb-2">
+                  <i class="fas fa-building me-2"></i>NOM_ENTREPRISE
+                </p>
+                <p class="location mb-3">
+                  <i class="fas fa-map-marker-alt me-2"></i>VILLE
+                </p>
+                <div class="mb-3">
+                  <span class="badge bg-warning me-2">TYPE_CONTRAT</span>
+                  <span class="badge bg-secondary">EXPERIENCE</span>
+                </div>
+                <p class="card-text">DESCRIPTION</p>
+                <hr>
+                <div class="contact-info">
+                  <h5 class="text-warning mb-3">Contact</h5>
+                  <p class="mb-2">
+                    <i class="fas fa-user me-2"></i>
+                    <span class="contact-name">NOM_CONTACT</span>
+                    <small class="text-muted ms-2 contact-function">FONCTION</small>
+                  </p>
+                  <p class="mb-2">
+                    <i class="fas fa-envelope me-2"></i>
+                    <a href="mailto:EMAIL" class="contact-email">EMAIL</a>
+                  </p>
+                  <p class="mb-0">
+                    <i class="fas fa-phone me-2"></i>
+                    <a href="tel:TELEPHONE" class="contact-phone">TELEPHONE</a>
+                  </p>
+                </div>
+                <div class="text-end mt-3">
+                  <small class="text-muted">DATE_PUBLICATION</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>Contact</h5>
+          <p><i class="fas fa-phone me-2"></i> +212 619 38 69 59</p>
+          <p><i class="fas fa-envelope me-2"></i> asso.inspiredculturecommunity@gmail.com</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <img src="photos_apbe/logo-icc.png" alt="ICC Logo" height="50">
+          <p class="mt-2">&copy; 2024 APBE - Accompagnement Professionnel Business-Emploi</p>
+          <small class="text-muted">
+            Tous droits réservés. Le contenu de ce site (textes, images, vidéos, logo) est la propriété exclusive de
+            l'association ICC (Inspired Culture Community) et de la plateforme APBE. Toute reproduction ou utilisation
+            sans autorisation écrite est strictement interdite.
+          </small>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12 text-center">
+          <small class="text-muted">
+            Siège social : Maroc | Association ICC - APBE | RC : En cours d'enregistrement
+          </small>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    // Initialisation AOS
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
+
+    // Données des offres
+    const offres = JSON.parse(localStorage.getItem('offers') || '[]');
+
+    // Fonction pour afficher les offres
+    function displayOffers(offers = offres) {
+      const container = document.getElementById('offersContainer');
+      const template = document.getElementById('jobTemplate');
+      const noOffersMessage = document.getElementById('noOffersMessage');
+
+      // Vider le conteneur sauf le message "aucune offre"
+      const existingOffers = container.querySelectorAll('.offer-item');
+      existingOffers.forEach(offer => offer.remove());
+
+      if (offers.length === 0) {
+        noOffersMessage.style.display = 'flex';
+        return;
+      }
+
+      noOffersMessage.style.display = 'none';
+
+      offers.forEach(offer => {
+        const offerElement = template.content.cloneNode(true);
+
+        offerElement.querySelector('.card-title').textContent = offer.titre;
+        offerElement.querySelector('.company').innerHTML = `<i class="fas fa-building me-2"></i>${offer.entreprise}`;
+        offerElement.querySelector('.location').innerHTML = `<i class="fas fa-map-marker-alt me-2"></i>${offer.ville}`;
+        offerElement.querySelector('.badge.bg-warning').textContent = offer.type;
+        offerElement.querySelector('.badge.bg-secondary').textContent = offer.experience;
+        offerElement.querySelector('.card-text').textContent = offer.description;
+        offerElement.querySelector('.contact-name').textContent = offer.contact.nom;
+        offerElement.querySelector('.contact-function').textContent = offer.contact.fonction;
+        offerElement.querySelector('.contact-email').textContent = offer.contact.email;
+        offerElement.querySelector('.contact-email').href = `mailto:${offer.contact.email}`;
+        offerElement.querySelector('.contact-phone').textContent = offer.contact.telephone;
+        offerElement.querySelector('.contact-phone').href = `tel:${offer.contact.telephone}`;
+        offerElement.querySelector('.text-muted').textContent = offer.date;
+
+        container.appendChild(offerElement);
+      });
+    }
+
+    // Fonction pour filtrer les offres
+    function filterOffers() {
+      const typeContrat = document.getElementById('typeContrat').value.toLowerCase();
+      const ville = document.getElementById('ville').value.toLowerCase();
+      const search = document.getElementById('searchInput').value.toLowerCase();
+
+      const filteredOffers = offres.filter(offer => {
+        const matchType = !typeContrat || offer.type.toLowerCase() === typeContrat;
+        const matchVille = !ville || offer.ville.toLowerCase() === ville;
+        const matchSearch = !search ||
+          offer.titre.toLowerCase().includes(search) ||
+          offer.description.toLowerCase().includes(search) ||
+          offer.entreprise.toLowerCase().includes(search);
+
+        return matchType && matchVille && matchSearch;
+      });
+
+      displayOffers(filteredOffers);
+    }
+
+    // Fonction pour postuler
+    function postuler(poste) {
+      window.open('https://docs.google.com/forms/d/e/1FAIpQLScTBdjKoqA34xkeJnhREmrpSuiLNVftHyDMnYS17zj5GHPrWA/viewform', '_blank');
+    }
+
+    // Afficher les offres au chargement de la page
+    document.addEventListener('DOMContentLoaded', () => {
+      displayOffers();
+    });
+  </script>
+</body>
+
+</html>
